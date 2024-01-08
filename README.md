@@ -24,8 +24,8 @@ Before running the project, make sure you have the following installed:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-usern  ame/roadcast.git
-    cd roadcast
+    git clone https://github.com/preeti-kashyap/roadcast.git
+    
     ```
 
 2. Install dependencies:
@@ -41,6 +41,8 @@ Before running the project, make sure you have the following installed:
     .\env\Scripts\activate
     
     pip install -r requirements.txt
+
+    cd roadcast
     ```
     
 
