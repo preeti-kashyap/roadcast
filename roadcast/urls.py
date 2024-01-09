@@ -9,5 +9,5 @@ urlpatterns = [
     path('friend-requests/<int:pk>/', FriendRequestUpdateView.as_view(), name='update-friend-request'),
     path('friend-requests/', FriendRequestListView.as_view(), name='friend-request-list'),
     path('friend-requests/pending/', PendingFriendRequestsListView.as_view(), name='pending-friend-requests'),
-    path('friends/', FriendListView.as_view(), name='friend-list'),
+    path('friend-list/', FriendListView.as_view(), name='friend-list'),
 ]

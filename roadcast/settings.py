@@ -139,3 +139,17 @@ REST_FRAMEWORK = {
         
     ),
 }
+
+AUTHENTICATION_CLASSES = [
+    'path.to.your.EmailBackend',
+    'rest_framework.authentication.TokenAuthentication',
+]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+RATELIMIT_CACHE = 'default'

@@ -11,7 +11,10 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from .models import FriendRequest       
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_ratelimit.decorators import ratelimit
+from django.views.decorators.csrf import csrf_exempt
 
 class UserSignupView(generics.CreateAPIView):
     serializer_class = UserSerializer
@@ -33,6 +36,18 @@ class UserLoginView(ObtainAuthToken):
 
     def get_object(self):
         return self.request.user
+
+    
+# class UserLoginView(ObtainAuthToken):
+#     serializer_class = EmailAuthTokenSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(data=request.data, context={'request': request})
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
+#         token, created = Token.objects.get_or_create(user=user)
+
+#         return Response({'token': token.key, 'user_id': user.id}, status=status.HTTP_200_OK)
 
 class UserSearchPagination(PageNumberPagination):
     page_size = 10
@@ -74,20 +89,19 @@ class UserSearchView(generics.ListAPIView):
 
 
 class FriendRequestCreateView(APIView):
+    # @method_decorator(csrf_exempt)
     # @ratelimit(key='user', rate='3/m', block=True)
     # def dispatch(self, *args, **kwargs):
     #     return super().dispatch(*args, **kwargs)
-
+    # @method_decorator(ratelimit(key='user', rate='3/m', block=True))
     def post(self, request, *args, **kwargs):
         to_user_id = request.data.get('to_user_id')  
-        from_user = request.user
+        from_user = self.request.user
         friend_request = FriendRequest.objects.create(from_user=from_user, to_user_id=to_user_id, status='pending')
 
         serializer = FriendRequestSerializer(friend_request)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 
 class FriendRequestUpdateView(generics.UpdateAPIView):
     queryset = FriendRequest.objects.all()
